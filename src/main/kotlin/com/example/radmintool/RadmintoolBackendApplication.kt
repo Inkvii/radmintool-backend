@@ -20,6 +20,7 @@ class RadmintoolBackendApplication(
     @EventListener(ApplicationReadyEvent::class)
     fun fireEventAfterStart() {
         databasePreparatorUtils.addPeopleToDb()
+        databasePreparatorUtils.addClientOrgToDb()
     }
 
 

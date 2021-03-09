@@ -1,7 +1,6 @@
 package com.example.radmintool.person
 
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,11 +16,12 @@ class PersonController(
 
     @GetMapping("/getAll")
     fun getPeople(): ResponseEntity<GetAllPeopleResponse> {
+        val then = System.currentTimeMillis()
         log.warn("Started")
         val response = GetAllPeopleResponse(personService.getAllPeopleAsDTO())
         log.warn("Fetched")
-
-        return ResponseEntity(response, HttpStatus.OK)
+        log.info("Call for /person/getAll took ${System.currentTimeMillis().minus(then)} ms")
+        return ResponseEntity.ok(response)
 
     }
 }
