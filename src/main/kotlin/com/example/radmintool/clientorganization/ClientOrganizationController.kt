@@ -2,10 +2,7 @@ package com.example.radmintool.clientorganization
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(path = ["/clientOrganization"], produces = ["application/json"])
@@ -23,4 +20,21 @@ class ClientOrganizationController(
         log.info("Call for /clientOrganization/${clientOrganizationId} took ${System.currentTimeMillis().minus(then)} ms")
         return ResponseEntity.ok(clientOrganization)
     }
+
+    @PostMapping("/{id}/update", consumes = ["application/json"])
+    fun updateClientOrganizationById(
+        @PathVariable("id") clientOrganizationId: Long,
+        @RequestBody changedColumns: ArrayList<UpdateClientOrg>
+    ): ResponseEntity<String> {
+        log.info("Yaay something is incoming: ${clientOrganizationId}, size: ${changedColumns.size}")
+        changedColumns.forEach {
+            log.info("Key: ${it.name}, value: ${it.value}")
+        }
+        return ResponseEntity.ok("It has been done")
+    }
+
+    data class UpdateClientOrg(
+        val name: String,
+        val value: String
+    )
 }
