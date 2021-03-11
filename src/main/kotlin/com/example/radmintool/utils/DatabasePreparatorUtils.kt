@@ -20,6 +20,11 @@ class DatabasePreparatorUtils(
         personService.addPerson(Person(firstName = "Pepa", lastName = "Franta", age = 41, clientOrganizationReference = 3))
         personService.addPerson(Person(firstName = "Radomír", lastName = "Dvořák", age = 68, clientOrganizationReference = 4))
         personService.addPerson(Person(firstName = "Vojtěch", lastName = "Sýk", age = 32, clientOrganizationReference = 5))
+        personService.addPerson(Person(firstName = "TestA", lastName = "Sýk", age = 32, clientOrganizationReference = 6))
+        personService.addPerson(Person(firstName = "TestB", lastName = "Testovič", age = 16, clientOrganizationReference = 7))
+        personService.addPerson(Person(firstName = "TestC", lastName = "Testik", age = 17, clientOrganizationReference = 8))
+        personService.addPerson(Person(firstName = "TestD", lastName = "Tester", age = 20, clientOrganizationReference = 9))
+        personService.addPerson(Person(firstName = "TestE", lastName = "Test", age = 23, clientOrganizationReference = 10))
     }
 
     fun addClientOrgToDb() {
