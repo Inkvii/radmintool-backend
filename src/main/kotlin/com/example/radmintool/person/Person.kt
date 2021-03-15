@@ -1,10 +1,8 @@
 package com.example.radmintool.person
 
+import com.example.radmintool.transaction.Transaction
 import java.io.Serializable
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 
 @Entity
@@ -15,7 +13,10 @@ data class Person(
         val firstName: String = "",
         val lastName: String = "",
         val age: Int = 0,
-        val clientOrganizationReference: Long? = null
+        val clientOrganizationReference: Long? = null,
+
+        @OneToMany(fetch = FetchType.LAZY, mappedBy = "paidBy")
+        val transactionHistory: List<Transaction> = emptyList()
 ) : Serializable
 
 
