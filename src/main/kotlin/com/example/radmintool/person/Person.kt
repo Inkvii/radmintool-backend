@@ -7,16 +7,16 @@ import javax.persistence.*
 
 @Entity
 data class Person(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null,
-        val firstName: String = "",
-        val lastName: String = "",
-        val age: Int = 0,
-        val clientOrganizationReference: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+    val firstName: String = "",
+    val lastName: String = "",
+    val age: Int = 0,
+    val clientOrganizationReference: Long? = null,
 
-        @OneToMany(fetch = FetchType.LAZY, mappedBy = "paidBy")
-        val transactionHistory: List<Transaction> = emptyList()
+    @OneToMany(fetch = FetchType.LAZY)
+    val transactionHistory: List<Transaction> = emptyList()
 ) : Serializable
 
 

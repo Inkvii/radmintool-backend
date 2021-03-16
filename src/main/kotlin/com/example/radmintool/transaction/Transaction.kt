@@ -1,6 +1,7 @@
 package com.example.radmintool.transaction
 
 import com.example.radmintool.person.Person
+import org.hibernate.annotations.CreationTimestamp
 import java.io.Serializable
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -11,6 +12,7 @@ data class Transaction(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
+    @CreationTimestamp
     val createdDateTime: LocalDateTime = LocalDateTime.now(),
     val amount: BigDecimal,
     @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
