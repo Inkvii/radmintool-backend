@@ -1,5 +1,6 @@
 package com.example.radmintool.security
 
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,10 +21,17 @@ data class AuthToken(
     val permissions: List<Permission>
 )
 
+enum class TokenRenewalExpirationType(val expires: Long) {
+    TESTING(3 * 1000),
+    USER(5 * 60 * 1000),
+    ADMIN(4 * 60 * 60 * 1000)
+}
+
 
 @RestController
 @RequestMapping("/authentication", consumes = ["application/json"], produces = ["application/json"])
 class AuthenticationController {
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("/login")
     fun login(@RequestBody login: LoginDTO): ResponseEntity<AuthToken?> {
@@ -32,7 +40,7 @@ class AuthenticationController {
                 AuthToken(
                     "Big bad admin",
                     System.currentTimeMillis(),
-                    System.currentTimeMillis() + (5 * 60 * 1000),
+                    System.currentTimeMillis() + TokenRenewalExpirationType.ADMIN.expires,
                     listOf(Permission.REDUX_COUNTER, Permission.ADMIN_PAGE)
                 )
             )
@@ -40,9 +48,9 @@ class AuthenticationController {
         if (login.username == "user") {
             return ResponseEntity.ok(
                 AuthToken(
-                    "Big bad admin",
+                    "Plebeian user",
                     System.currentTimeMillis(),
-                    System.currentTimeMillis() + (5 * 60 * 1000),
+                    System.currentTimeMillis() + TokenRenewalExpirationType.USER.expires,
                     listOf(Permission.REDUX_COUNTER)
                 )
             )
@@ -51,11 +59,12 @@ class AuthenticationController {
 
     @PostMapping("/renewToken")
     fun renewToken(@RequestBody token: AuthToken?): ResponseEntity<AuthToken> {
+        log.info("Renewing token - ${token}")
         if (token != null) {
             return ResponseEntity.ok(
                 token.copy(
                     issued = System.currentTimeMillis(),
-                    expires = System.currentTimeMillis() + (5 * 60 * 1000),
+                    expires = System.currentTimeMillis() + TokenRenewalExpirationType.TESTING.expires,
                     permissions = token.permissions.toList()
                 )
             )
