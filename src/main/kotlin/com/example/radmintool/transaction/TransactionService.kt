@@ -27,4 +27,12 @@ class TransactionService(
     fun getTransactionsInLast5Minutes(): List<Transaction> {
         return transactionRepository.findByCreatedDateTimeAfter(LocalDateTime.now().minusMinutes(5))
     }
+
+    fun getTransactionsWithFilter(filter: LongTransactionRequestDTO) : List<Transaction> {
+        val person = personRepository.findById(filter.personId)
+        if (person.isEmpty) {
+            return emptyList()
+        }
+        return transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(filter.fromId, filter.toId, filter.fromAmount, filter.toAmount, person.get())
+    }
 }
