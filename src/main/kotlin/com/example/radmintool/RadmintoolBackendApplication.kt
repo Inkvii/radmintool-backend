@@ -21,6 +21,7 @@ class RadmintoolBackendApplication(
     fun fireEventAfterStart() {
         databasePreparatorUtils.addPeopleToDb()
         databasePreparatorUtils.addClientOrgToDb()
+        databasePreparatorUtils.addThousandsTransactions(2)
     }
 
 

@@ -6,13 +6,17 @@ import com.example.radmintool.partyproperty.PartyProperty
 import com.example.radmintool.partyproperty.PartyPropertyGroup
 import com.example.radmintool.person.Person
 import com.example.radmintool.person.PersonService
+import com.example.radmintool.transaction.TransactionService
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.util.*
+import kotlin.random.Random
 
 @Service
 class DatabasePreparatorUtils(
     private val personService: PersonService,
-    private val clientOrganizationService: ClientOrganizationService
+    private val clientOrganizationService: ClientOrganizationService,
+    private val transactionService: TransactionService
 ) {
     fun addPeopleToDb() {
         personService.addPerson(Person(firstName = "Alois", lastName = "Jirásek", age = 127, clientOrganizationReference = 1))
@@ -33,6 +37,14 @@ class DatabasePreparatorUtils(
         clientOrganizationService.addClientOrganization(createClientOrg("EDEKA", "9876540654056"))
         clientOrganizationService.addClientOrganization(createClientOrg("EasyShopper", "975246554242"))
         clientOrganizationService.addClientOrganization(createClientOrg("REWE", "9705254065000"))
+    }
+
+    fun addThousandsTransactions(paidById: Long) {
+        for (i in 1..5000) {
+            val value = Math.floor(Random.nextDouble(1.00,120.00) * 100) / 100
+            transactionService.captureTransaction(BigDecimal(value), paidById)
+        }
+
     }
 
     private fun createClientOrg(doingBusinessAs: String, extClientOrgId: String): ClientOrganization {
