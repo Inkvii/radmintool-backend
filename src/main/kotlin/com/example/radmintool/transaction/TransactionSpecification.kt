@@ -13,11 +13,11 @@ object TransactionSpecification {
 
             idFrom?.let {
                 val id = root.get<Long>("id")
-                predicates.add(cb.greaterThan(id, idFrom))
+                predicates.add(cb.greaterThanOrEqualTo(id, idFrom))
             }
             idTo?.let {
                 val id = root.get<Long>("id")
-                predicates.add(cb.lessThan(id, idTo))
+                predicates.add(cb.lessThanOrEqualTo(id, idTo))
             }
             cb.and(*predicates.toTypedArray())
         }
@@ -29,12 +29,12 @@ object TransactionSpecification {
 
             amountFrom?.let {
                 val amount = root.get<BigDecimal>("amount")
-                predicates.add(cb.greaterThan(amount, amountFrom))
+                predicates.add(cb.greaterThanOrEqualTo(amount, amountFrom))
             }
             amountTo?.let {
                 val amount = root.get<BigDecimal>("amount")
 
-                predicates.add(cb.lessThan(amount, amountTo))
+                predicates.add(cb.lessThanOrEqualTo(amount, amountTo))
             }
             cb.and(*predicates.toTypedArray())
         }

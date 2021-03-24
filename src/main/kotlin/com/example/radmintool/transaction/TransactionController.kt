@@ -63,9 +63,11 @@ class TransactionController(
 
     @PostMapping("/longTransactions", consumes = ["application/json"])
     fun getLongTransactions(@RequestBody request: LongTransactionRequestDTO) : ResponseEntity<LongTransactionResponseDTO> {
+        log.info("Request ${request.toString()}")
         val paginatedResult = transactionService.getTransactionsWithFilter(request)
 
         val response = LongTransactionResponseDTO(data = paginatedResult.content, paginatedResult.totalElements, paginatedResult.totalPages)
+        log.info(response.toString())
         return ResponseEntity.ok(response)
     }
 }

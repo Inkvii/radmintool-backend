@@ -44,11 +44,6 @@ class TransactionService(
             PageRequest.of(request.pageIndex, 100)
         )
 
-//        val result = transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(
-//                request.filter.fromId, request.filter.toId, request.filter.fromAmount, request.filter.toAmount, person.get(),
-//                PageRequest.of(request.pageIndex, 100)
-//        )
-
         return result
     }
 }
