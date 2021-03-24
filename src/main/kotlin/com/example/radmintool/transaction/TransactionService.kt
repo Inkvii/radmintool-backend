@@ -11,8 +11,8 @@ import java.util.*
 
 @Service
 class TransactionService(
-        val transactionRepository: TransactionRepository,
-        val personRepository: PersonRepository
+    val transactionRepository: TransactionRepository,
+    val personRepository: PersonRepository
 ) {
 
     fun captureTransaction(amount: BigDecimal, paidBy: Long): Boolean {
@@ -36,10 +36,18 @@ class TransactionService(
             return Page.empty()
         }
 
-        val result = transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(
-                request.filter.fromId, request.filter.toId, request.filter.fromAmount, request.filter.toAmount, person.get(),
-                PageRequest.of(request.pageIndex, 100)
+
+        val result = transactionRepository.findAll(
+            TransactionSpecification.betweenId(request.filter.fromId, request.filter.toId)
+                .and(TransactionSpecification.betweenAmount(request.filter.fromAmount, request.filter.toAmount))
+                .and(TransactionSpecification.paidByPerson(person.get())),
+            PageRequest.of(request.pageIndex, 100)
         )
+
+//        val result = transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(
+//                request.filter.fromId, request.filter.toId, request.filter.fromAmount, request.filter.toAmount, person.get(),
+//                PageRequest.of(request.pageIndex, 100)
+//        )
 
         return result
     }

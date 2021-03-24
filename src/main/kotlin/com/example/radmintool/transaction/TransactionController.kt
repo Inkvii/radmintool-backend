@@ -3,7 +3,6 @@ package com.example.radmintool.transaction
 import com.example.radmintool.radmintool.RadmintoolService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
-import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
@@ -31,11 +30,11 @@ data class LongTransactionResponseDTO(
 )
 
 data class TransactionFilterDTO(
-        val fromId: Long = 0,
-        val toId: Long = 0,
-        val fromAmount: BigDecimal = BigDecimal(0),
-        val toAmount: BigDecimal = BigDecimal(0),
-        val personId: Long = 0
+    val fromId: Long? = null,
+    val toId: Long? = null,
+    val fromAmount: BigDecimal? = null,
+    val toAmount: BigDecimal? = null,
+    val personId: Long = 0
 )
 
 @RestController
