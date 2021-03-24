@@ -2,6 +2,8 @@ package com.example.radmintool.transaction
 
 import com.example.radmintool.person.Person
 import com.example.radmintool.person.PersonRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -9,8 +11,8 @@ import java.util.*
 
 @Service
 class TransactionService(
-    val transactionRepository: TransactionRepository,
-    val personRepository: PersonRepository
+        val transactionRepository: TransactionRepository,
+        val personRepository: PersonRepository
 ) {
 
     fun captureTransaction(amount: BigDecimal, paidBy: Long): Boolean {
@@ -28,11 +30,17 @@ class TransactionService(
         return transactionRepository.findByCreatedDateTimeAfter(LocalDateTime.now().minusMinutes(5))
     }
 
-    fun getTransactionsWithFilter(filter: LongTransactionRequestDTO) : List<Transaction> {
-        val person = personRepository.findById(filter.personId)
+    fun getTransactionsWithFilter(request: LongTransactionRequestDTO): Page<Transaction> {
+        val person = personRepository.findById(request.filter.personId)
         if (person.isEmpty) {
-            return emptyList()
+            return Page.empty()
         }
-        return transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(filter.fromId, filter.toId, filter.fromAmount, filter.toAmount, person.get())
+
+        val result = transactionRepository.findTransactionsByIdBetweenAndAmountBetweenAndPaidBy(
+                request.filter.fromId, request.filter.toId, request.filter.fromAmount, request.filter.toAmount, person.get(),
+                PageRequest.of(request.pageIndex, 100)
+        )
+
+        return result
     }
 }

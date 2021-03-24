@@ -3,6 +3,7 @@ package com.example.radmintool.transaction
 import com.example.radmintool.radmintool.RadmintoolService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
@@ -14,6 +15,22 @@ data class CaptureRequestDTO(
 )
 
 data class LongTransactionRequestDTO(
+        val filter: TransactionFilterDTO = TransactionFilterDTO(),
+        val pageIndex: Int
+)
+
+data class FilterTransaction(
+        val filter: TransactionFilterDTO = TransactionFilterDTO(),
+        val showOnFilterDemandOnly: Boolean = false
+)
+
+data class LongTransactionResponseDTO(
+        val data: List<Transaction>,
+        val totalCount: Long,
+        val totalPages: Int,
+)
+
+data class TransactionFilterDTO(
         val fromId: Long = 0,
         val toId: Long = 0,
         val fromAmount: BigDecimal = BigDecimal(0),
@@ -42,14 +59,14 @@ class TransactionController(
 
     @GetMapping("/longTransactions")
     fun getLongTransactionsHeaders() : String{
-        return jacksonObjectMapper().writeValueAsString(LongTransactionRequestDTO())
+        return jacksonObjectMapper().writeValueAsString(FilterTransaction(showOnFilterDemandOnly = false))
     }
 
     @PostMapping("/longTransactions", consumes = ["application/json"])
-    fun getLongTransactions(@RequestBody request: LongTransactionRequestDTO) : ResponseEntity<List<Transaction>> {
+    fun getLongTransactions(@RequestBody request: LongTransactionRequestDTO) : ResponseEntity<LongTransactionResponseDTO> {
+        val paginatedResult = transactionService.getTransactionsWithFilter(request)
 
-        val list = transactionService.getTransactionsWithFilter(request)
-
-        return ResponseEntity.ok(list)
+        val response = LongTransactionResponseDTO(data = paginatedResult.content, paginatedResult.totalElements, paginatedResult.totalPages)
+        return ResponseEntity.ok(response)
     }
 }
