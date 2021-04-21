@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.spring") version "1.4.30"
     kotlin("plugin.jpa") version "1.4.30"
+    id("groovy")
 }
 
 group = "com.example"
@@ -25,6 +26,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = "2.4.15")
+    testImplementation(group = "org.spockframework", name = "spock-core", version = "1.1-groovy-2.4")
 }
 
 tasks.withType<KotlinCompile> {
@@ -32,8 +35,4 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
